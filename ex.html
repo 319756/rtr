@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inserir Dados na Planilha</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+
+table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+
+
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      text-align: center;
+      margin: 40px;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    label {
+      margin-top: 10px;
+    }
+    input, button {
+      padding: 10px;
+      margin-top: 5px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #loading-container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-top: 23px;
+    }
+    #loading-icon {
+      color: #4caf50;
+      font-size: 155px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .loading {
+      animation: spin 1s linear infinite;
+    }
+  </style>
+</head>
+<body>
+
+
+  
+
+
+<form id="data-form">
+  <label for="descricao">Descrição:</label>
+  <input type="text" id="descricao" name="descricao" required>
+
+  <label for="valor">Valor:</label>
+  <input type="number" id="valor" name="valor" required>
+
+  <label for="dataEscolhida">Data Escolhida:</label>
+  <input type="date" id="dataEscolhida" name="dataEscolhida" required>
+
+  <button type="button" onclick="inserirDados()">Inserir Dados</button>
+</form>
+
+<div id="loading-container">
+  <i id="loading-icon" class="fas fa-circle-notch loading"></i>
+</div>
+
+<script>
+
+  
+
+
+ function inserirDados() {
+   var form = document.getElementById('data-form');
+   var descricao = form.elements['descricao'].value;
+   var valor = form.elements['valor'].value;
+   var dataEscolhida = form.elements['dataEscolhida'].value;
+   
+   if (descricao && valor && dataEscolhida) {
+     document.getElementById('loading-container').style.display = 'flex';
+     
+     var url = 'https://script.google.com/macros/s/AKfycbzDjzFJdNNCAWOn2PlKBYpUbQujgFmYeqDn10BFn38rZnyCW5tN0iIRZvD-l93F6Ohfhg/exec';
+     var xhr = new XMLHttpRequest();
+     xhr.open('GET', url + '?descricao=' + encodeURIComponent(descricao) + '&valor=' + encodeURIComponent(valor) + '&dataEscolhida=' + encodeURIComponent(dataEscolhida), true);
+     xhr.onreadystatechange = function () {
+       if (xhr.readyState == 4) {
+         document.getElementById('loading-container').style.display = 'none';
+         
+         if (xhr.status == 200) {
+           alert(xhr.responseText);
+         } else {
+           alert('Erro ao inserir dados.');
+         }
+       }
+     };
+     xhr.send();
+   }
+ }
+</script>
+
+</body>
+</html>
